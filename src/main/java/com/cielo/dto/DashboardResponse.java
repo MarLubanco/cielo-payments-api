@@ -16,5 +16,5 @@ import java.util.Map;
 public class DashboardResponse {
 
     private PercentPayment percentPayment;
-    private Map<String, List<Integer>> bankMorePopular;
+    private List<BankPopular> bankMorePopular;
 }
