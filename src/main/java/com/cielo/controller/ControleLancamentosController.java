@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lancamentos")
+@RequestMapping("/payments")
 public class ControleLancamentosController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class ControleLancamentosController {
     }
 
     @CrossOrigin
-    @GetMapping("/porcentagem-pagos")
+    @GetMapping("/dashboard")
     public DashboardResponse findPercentPaymentPaid() {
         return controleLancamentosService.getDashboard();
     }
