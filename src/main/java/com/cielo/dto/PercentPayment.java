@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class PercentPayment {
 
-    private Integer percentPaid;
+    private Double percentPaid;
     private Integer totalPayments;
     private Integer paymentsPaid;
     private List<ControleLancamento> controleLancamentoList;

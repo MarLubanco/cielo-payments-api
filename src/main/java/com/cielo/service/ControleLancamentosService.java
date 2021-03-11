@@ -1,5 +1,6 @@
 package com.cielo.service;
 
+import com.cielo.dto.BankPopular;
 import com.cielo.dto.DashboardResponse;
 import com.cielo.dto.PercentPayment;
 import com.cielo.model.ControleLancamento;
@@ -27,27 +28,31 @@ public class ControleLancamentosService {
         List<ControleLancamento> lancamentos = controleLancamentoRepository.findAll();
         List<ControleLancamento> lancamentosPagos = lancamentos.stream()
                 .filter(controle -> controle.getLancamentoContaCorrenteCliente()
-                        .getNomeSituacaoRemessa().equalsIgnoreCase("PAGO"))
+                        .getNomeSituacaoRemessa().equals("Pago"))
                 .collect(Collectors.toList());
         PercentPayment percentPayment = calculatesPercentagePaymentsPaid(lancamentos, lancamentosPagos);
-        Map<String, List<Integer>> bankMorePopular = getBankMorePopular();
+        List<BankPopular> bankMorePopular = getBankMorePopular();
         return DashboardResponse.builder()
                 .percentPayment(percentPayment)
                 .bankMorePopular(bankMorePopular)
                 .build();
     }
 
-    public Map<String, List<Integer>> getBankMorePopular() {
-        return controleLancamentoRepository.findAll().stream()
+    public List<BankPopular> getBankMorePopular() {
+        Map<String, List<Integer>> bankMorePopulars = controleLancamentoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(ControleLancamento::getNomeBanco,
-                            Collectors.mapping(ControleLancamento::getId, Collectors.toList())));
+                        Collectors.mapping(ControleLancamento::getId, Collectors.toList())));
+        return bankMorePopulars.entrySet().stream()
+                .map(bank -> new BankPopular(bank.getKey(), bank.getValue().size()))
+                .collect(Collectors.toList());
+
     }
 
     public PercentPayment calculatesPercentagePaymentsPaid(List<ControleLancamento> lancamentos, List<ControleLancamento> payments) {
-        int percent = payments.size() / lancamentos.size() * PERCENT;
+        double percent = Double.valueOf(payments.size()) / Double.valueOf(lancamentos.size()) * PERCENT;
 
         return PercentPayment.builder()
-                .paymentsPaid(lancamentos.size())
+                .paymentsPaid(payments.size())
                 .percentPaid(percent)
                 .totalPayments(lancamentos.size())
                 .controleLancamentoList(payments)
