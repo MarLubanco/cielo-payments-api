@@ -49,3 +49,7 @@ docker pull marthome/cielo-payments-api:1.0
 
 docker run --name cielo-payments -e USER_DATABASE=<user> -e PASSWORD_DATABASE=<password> -p 8082:8082 marthome/cielo-payments-api:1.2
 ```
+
+### After start
+
+After starting the application, send the request for /integrations to persist the database from the file lancamento-conta-legado.json
