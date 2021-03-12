@@ -12,10 +12,20 @@ public class IntegrationBankService {
     @Autowired
     private IntegrationBankRepository integrationBankRepository;
 
+    /**
+     * Persist legacy system integration data
+     * @param integrationBank
+     * @return
+     */
     public IntegrationBank saveIntegration(IntegrationBank integrationBank) {
         return integrationBankRepository.save(integrationBank);
     }
 
+    /**
+     * Returns integration by id
+     * @param id
+     * @return
+     */
     public IntegrationBank findById(Integer id) {
         return integrationBankRepository.findById(id)
                 .orElseThrow(() -> new NotExistIntegration("Essa integração não existe!"));

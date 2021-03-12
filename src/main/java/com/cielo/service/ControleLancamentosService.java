@@ -20,10 +20,18 @@ public class ControleLancamentosService {
     @Autowired
     private ControleLancamentoRepository controleLancamentoRepository;
 
+    /**
+     * Retual all payments
+     * @return
+     */
     public List<ControleLancamento> findAll() {
         return controleLancamentoRepository.findAll();
     }
 
+    /**
+     * Collect a dashboad with statistical data
+     * @return
+     */
     public DashboardResponse getDashboard() {
         List<ControleLancamento> lancamentos = controleLancamentoRepository.findAll();
         List<ControleLancamento> lancamentosPagos = lancamentos.stream()
@@ -38,6 +46,10 @@ public class ControleLancamentosService {
                 .build();
     }
 
+    /**
+     * Retrieves a list of banks and the number of transactions that bank has
+     * @return
+     */
     public List<BankPopular> getBankMorePopular() {
         Map<String, List<Integer>> bankMorePopulars = controleLancamentoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(ControleLancamento::getNomeBanco,
@@ -48,6 +60,12 @@ public class ControleLancamentosService {
 
     }
 
+    /**
+     * Calculates percentage of payments that are in paid status
+     * @param lancamentos
+     * @param payments
+     * @return
+     */
     public PercentPayment calculatesPercentagePaymentsPaid(List<ControleLancamento> lancamentos, List<ControleLancamento> payments) {
         double percent = Double.valueOf(payments.size()) / Double.valueOf(lancamentos.size()) * PERCENT;
 
